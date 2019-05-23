@@ -7,6 +7,7 @@ var vue = new Vue ({
         loading: true,
         bookName: '',
         bookList: [],
+        SavedList: [],
     },
     computed: {
 
@@ -20,7 +21,8 @@ var vue = new Vue ({
             try {
                 this.loading = true;
                 
-                const result1 = await axios.get("http://openlibrary.org/search.json?q=" + noSpace(this.bookName));
+                const result1 = await axios.get("http://openlibrary.org/search.json?q=" + replaceSpace(this.bookName))
+
                 console.log(result1);
                 
                 if (result1.data.docs.length == 0) {
@@ -44,7 +46,7 @@ var vue = new Vue ({
                         }
 
                         this.bookList.push(newBook);
-                        this.masterList.push(newBook);
+                        this.SavedList.push(newBook);
                         
                     } catch (err) {
                         console.error(err);
@@ -58,6 +60,6 @@ var vue = new Vue ({
     }
 });
 
-function noSpace(str) {
+function replaceSpace(str) {
   return str.replace(' ', '+');
 }

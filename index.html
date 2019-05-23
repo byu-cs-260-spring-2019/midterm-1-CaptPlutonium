@@ -10,7 +10,7 @@
         <h1>Search for a Book</h1>
         <div id="app">
             <form v-on:submit.prevent="searchBooks">
-                <input v-model="bookName" placeholder="Search for a book" />
+                <input v-model="bookName" placeholder="lord Of The Rings" />
             </form>
         </div>
         <div v-if="loading">
@@ -20,7 +20,12 @@
                 <template v-for="(item, index) in bookList">
                     <img v-bind:src="img">
                 </template>
-                  
+                <div class="book Info">
+                    <p>
+                        Author: <span v-text="book.author"></span>
+                        <br>Publisher: <span v-text="book.publisher"></span>
+                        <br>ISBN: <span v-text="book.isbn_10"></span>
+</p>
                 </div>
             </div>
         </div>
@@ -28,7 +33,11 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="./script.js"></script>
-        
+        <div id="footer">
+            source code by Ethan Nelson found at : <a href="https://github.com/byu-cs-260-spring-2019/midterm-1-CaptPlutonium.git">github</a> https://creativeproj-7724f.firebaseapp.com/
+          </div>
     </body>
+    
+      
     
 </html>
