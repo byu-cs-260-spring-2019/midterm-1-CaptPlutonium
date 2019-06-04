@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Book Search</title>
-        <link rel="stylesheet" href="./styles.css"/>
-        
-    </head>
-    <body>
-        <h1>Search for a Book</h1>
-        <div id="app">
-            <form v-on:submit.prevent="searchBooks">
-                <input v-model="bookName" placeholder="lord Of The Rings" />
+  <head>
+    <title>Book List</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+     
+          <div id = "root">
+              <h1>Enter your book title</h1>
+              <div v-if="loading">
+                  <p>loading...</p>
+              </div>
+      
+              <div v-else>
+              
+            <form v-on:submit.prevent="bookFind">
+                <input type="text" v-model="inquiry">
+                <button type="bookFind">
+                    Search
+                </button>
+      
             </form>
+            <ul>
+                <div v-for="item in myBooks">
+                    <li> <img v-bind:src="item.thumbnail"/>{{item.title}} </br>
+                        By: {{item.author}} </br>
+                        Published in: {{item.publishDate}} 
+                        <form v-on:submit.prevent="favoriteItem(item)">
+                          <button v-on:click="favoriteItem(item)" >Add to favorites</button>
+                      </form>
+                    </li>
+                  </div>
+
+             </ul>
+          
+          
+          
+          <h1>Your favorites:</h1>
+          <div v-for="item in myBooks">
+          <div v-if = "item.favorite == true">
+              <li><img v-bind:src="item.thumbnail"/>{{item.title}} </br>
+                By: {{item.author}} </br>
+                Published in: {{item.publishDate}} </br>
+                <form v-on:submit.prevent="deleteItem(item)">
+                  <button v-on:click="deleteItem(item)" >X</button>
+              </form>  </li>
+            </div>
+          </div>
         </div>
-        <div v-if="loading">
-                <p>Loading results...</p>
-            </div>
-            <div v-else>
-                <template v-for="(item, index) in bookList">
-                    <img v-bind:src="img">
-                </template>
-                <div class="book Info">
-                    <p>
-                        Author: <span v-text="book.author"></span>
-                        <br>Publisher: <span v-text="book.publisher"></span>
-                        <br>ISBN: <span v-text="book.isbn_10"></span>
-</p>
-                </div>
-            </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="./script.js"></script>
-        <div id="footer">
-            source code by Ethan Nelson found at : <a href="https://github.com/byu-cs-260-spring-2019/midterm-1-CaptPlutonium.git">github</a> https://creativeproj-7724f.firebaseapp.com/
-          </div>
-    </body>
-    
-      
-    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

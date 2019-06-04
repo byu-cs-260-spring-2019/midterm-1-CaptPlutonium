@@ -1,65 +1,67 @@
-
-
-var vue = new Vue ({
-
-    el: "#app",
-    data: {
+var app = new Vue({
+    el: '#root',
+    data : {
+        inquiry: '',
         loading: true,
-        bookName: '',
-        bookList: [],
-        SavedList: [],
+        ISBN: [],
+        thumbnails: [],
+        myBooks: [
+        ],
     },
-    computed: {
+    // title, author, publish date, cover image
 
+    created() {
+        this.bookFind();    
     },
     methods: {
-        async searchBooks() {
-            if (this.bookName == '') {
-                return;
-            }
-            
-            try {
+        async bookFind() {
+            try{
                 this.loading = true;
-                
-                const result1 = await axios.get("http://openlibrary.org/search.json?q=" + replaceSpace(this.bookName))
+                const response = await axios.get('http://openlibrary.org/search.json?q=' + this.inquiry)
+                const data = response.data;
+                console.log(data);
+                this.loading = false;
+                for(var i = 0; i < data.docs.length; i++){
 
-                console.log(result1);
-                
-                if (result1.data.docs.length == 0) {
+
+                    this.myBooks.push({title : data.docs[i].title_suggest, author : data.docs[i].author_name, publishDate : data.docs[i].first_publish_year, isbn: data.docs[i].isbn, thumbnail : '', favorite : false});
+                    if(typeof this.myBooks[i].isbn !== 'undefined'){
+                    this.ISBN = this.myBooks[i].isbn[0];
+                    console.log(this.ISBN);
+                    const response2 = await axios.get('https://openlibrary.org/api/books?bibkeys=ISBN:' + this.ISBN + '&jscmd=details&format=json')             
+                    const url = response2.data['ISBN:'+this.ISBN].thumbnail_url;
+                    console.log(url);
+                    if(typeof url !== 'undefined'){
+                        this.myBooks[i].thumbnail = url;
+                    }
+          
+                    }
+
                   
                 }
-                try {
-
-                        const ISBN = result1.data.docs[1].isbn[0];
-                        const rawBookData = await axios.get("https://openlibrary.org/api/books?bibkeys=ISBN:" + ISBN + "&jscmd=details&format=json");
-
-                        const bookNum = "ISBN:" + ISBN;
-                        const bookData = rawBookData.data[bookNum];
-                        console.log(bookData);
-
-                        var newBook = {
-                             name: JSON.bookData.title,
-                             bookAuthor: JSON.bookData.author,
-                             isbnNum: ISBN,
-                             img:JSON.bookData.thumbnail_url,
-                            favorite: false
-                        }
-
-                        this.bookList.push(newBook);
-                        this.SavedList.push(newBook);
-                        
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
-                catch (err) {
-                console.error(err);
+                
+                
+                return true;
             }
-            this.loading = false;
-        }
-    }
-});
+            
+            catch(error){
+                console.log(error);
+                this.loading = false;
+                return false;
+            }
+     
+        },
+        favoriteItem(item){
+            var index = this.myBooks.indexOf(item);
+            this.myBooks[index].favorite = true;
 
-function replaceSpace(str) {
-  return str.replace(' ', '+');
-}
+        },
+        deleteItem(item){
+            var index = this.myBooks.indexOf(item);
+            this.myBooks[index].favorite = false;
+        }
+
+    },
+
+
+});

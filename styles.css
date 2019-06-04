@@ -1,21 +1,30 @@
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Arvo';
     font-size: 16px;
     padding: 20px 100px 0px 100px;
-    background: #f3f3f3;
+    background: blueviolet;
+   
 }
+img{
+    object-fit: cover;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+  }
+h1 {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+li {
+    background:salmon;
+    width: 500px;
+    min-height: 30px;
+    padding: 10px;
+    margin-bottom: 10px;
 
-button {
-    font-family: 'Montserrat', sans-serif;
     font-size: 1em;
+    display: flex;
+    align-items: center;
 }
-
-textarea {
-    width: 100%;
-    max-width: 500px;
-    height: 100px;
-}
-
 #footer {
 
     position: fixed;
